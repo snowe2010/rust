@@ -126,7 +126,6 @@ mod impls {
     use prelude::*;
 
     use borrow::{Cow, ToOwned};
-    use intrinsics::TypeId;
     use mem;
     use super::{Hash, Writer};
     use num::Int;
@@ -260,13 +259,6 @@ mod impls {
         }
     }
 
-    impl<S: Writer> Hash<S> for TypeId {
-        #[inline]
-        fn hash(&self, state: &mut S) {
-            self.hash().hash(state)
-        }
-    }
-
     impl<'a, T, B: ?Sized, S> Hash<S> for Cow<'a, T, B>
         where B: Hash<S> + ToOwned<T>
     {
@@ -282,7 +274,6 @@ mod impls {
     use prelude::*;
 
     use borrow::{Cow, ToOwned};
-    use intrinsics::TypeId;
     use mem;
     use super::{Hash, Writer, Hasher};
     use num::Int;
@@ -413,13 +404,6 @@ mod impls {
             // NB: raw-pointer Hash does _not_ dereference
             // to the target; it just gives you the pointer-bytes.
             (*self as uint).hash(state);
-        }
-    }
-
-    impl<S: Writer + Hasher> Hash<S> for TypeId {
-        #[inline]
-        fn hash(&self, state: &mut S) {
-            self.hash().hash(state)
         }
     }
 
